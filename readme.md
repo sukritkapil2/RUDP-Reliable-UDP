@@ -25,8 +25,6 @@ To run for different addresses, you can specify the address using -a tag and por
 
 Automated Testing is done using netem tool which simulates various network conditions like packet drop. First of all, `transfer_test.py` is run from tests folder which runs the test. Then `plot.py` is run which plots all the results.
 
-## Charts
-
 ## Group Details
 
 Sukrit 2018A7PS0205H
