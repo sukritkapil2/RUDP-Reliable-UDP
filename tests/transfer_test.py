@@ -7,9 +7,6 @@ from functools import partial
 from pathlib import Path
 from threading import Thread
 from netimpair import Netem
-import sys
-
-sys.path.insert(0, str(Path(__file__).parent.parent))
 from file_transfer import receiver, sender
 
 Factor = namedtuple(
