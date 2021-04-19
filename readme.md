@@ -25,6 +25,10 @@ To run for different addresses, you can specify the address using -a tag and por
 
 Automated Testing is done using netem tool which simulates various network conditions like packet drop. First of all, `transfer_test.py` is run from tests folder which runs the test. Then `plot.py` is run which plots all the results.
 
+## Changes during Phase 2
+
+Initially we thought to implement both blocking and non blocking mode in RUDP, but we simply implemented blocking RUDP by default since it does not make any changes in the reliability of the protocol.
+
 ## Group Details
 
 Sukrit 2018A7PS0205H
