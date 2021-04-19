@@ -1,12 +1,12 @@
 import argparse
 import ipaddress
-import logging
 import time
 from pathlib import Path
 from RUDP import RUDP
 
 NAME_MARKER = b":name:"
 END_MARKER = b":end:"
+
 
 def receiver(address, port, directory, **kwargs):
     sock_fd = RUDP(str(address), port)
@@ -21,12 +21,12 @@ def receiver(address, port, directory, **kwargs):
         data = sock_fd.recvRUDP()
         if not data:
             if not file_name:
-                time.sleep(1)
+                time.sleep(1)  # Idle mode
             else:
-                time.sleep(0.1)
+                time.sleep(0.1)  # active connection
             continue
-        if data.startswith(NAME_MARKER):
-            file_name = data[len(NAME_MARKER) :].decode()
+        if data.startswith(NAME_MARKER):  # first packet has filename
+            file_name = data[len(NAME_MARKER):].decode()
             file = open(directory / file_name, "wb")
             print(f"Receiving {file_name}")
             size, start_time = 0, time.time()
@@ -34,7 +34,7 @@ def receiver(address, port, directory, **kwargs):
             delta_time = time.time() - start_time
             file.close()
             break
-        else:
+        else:  # file contents received, store to file
             size += len(data)
             file.write(data)
     sock_fd.closeRUDP()
@@ -64,7 +64,7 @@ def sender(address, port, file, **kwargs):
 
     while offset < total_size:
         try:
-            sock_fd.sendRUDP(file_data[offset : offset + pkt_size])
+            sock_fd.sendRUDP(file_data[offset: offset + pkt_size])
         except Exception:
             time.sleep(1)
         else:
@@ -93,7 +93,8 @@ if __name__ == "__main__":
     )
     subparser = parser.add_subparsers(help="Role? (receiver/sender)")
     parser_sender = subparser.add_parser("sender")
-    parser_sender.add_argument("file", type=Path, help="File to send over RUDP")
+    parser_sender.add_argument(
+        "file", type=Path, help="File to send over RUDP")
     parser_sender.set_defaults(func=sender)
     parser_receiver = subparser.add_parser("receiver")
     parser_receiver.add_argument(
